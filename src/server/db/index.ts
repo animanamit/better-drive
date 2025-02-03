@@ -28,4 +28,10 @@ const conn =
 //   globalForDb.client ?? createClient({ url: env.DATABASE_URL });
 if (env.NODE_ENV !== "production") globalForDb.conn = conn;
 
+conn.addListener("error", (err) => {
+  console.error("Database connection error:", err);
+});
+
+export const db = drizzle(conn, { schema });
+
 // export const db = drizzle(client, { schema });
