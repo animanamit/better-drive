@@ -1,61 +1,74 @@
-import type { File } from "./types";
+export interface File {
+  id: string;
+  name: string;
+  type: "file";
+  url: string;
+  parent: string;
+  size: string;
+}
 
-export const files: File[] = [
-  // Root folders
+export type Folder = {
+  id: string;
+  name: string;
+  type: "folder";
+  parent: string | null;
+};
+
+export const mockFolders: Folder[] = [
+  { id: "root", name: "root", type: "folder", parent: null },
+  { id: "1", name: "Documents", type: "folder", parent: "root" },
+  { id: "2", name: "Images", type: "folder", parent: "root" },
+  { id: "3", name: "Work", type: "folder", parent: "root" },
+  { id: "4", name: "Presentations", type: "folder", parent: "3" },
+];
+
+export const mockFiles: File[] = [
   {
-    id: "documents",
-    name: "Documents",
-    type: "folder",
-    modified: "Jan 17, 2024",
-    parentId: null,
+    id: "4",
+    name: "Resume.pdf",
+    type: "file",
+    url: "/files/resume.pdf",
+    parent: "root",
+    size: "1.2 MB",
   },
   {
-    id: "images",
-    name: "Images",
-    type: "folder",
-    modified: "Jan 16, 2024",
-    parentId: null,
-  },
-  // Documents folder contents
-  {
-    id: "proposal",
-    name: "Project Proposal",
-    type: "document",
-    size: "2.1 MB",
-    modified: "Jan 15, 2024",
-    parentId: "documents",
+    id: "5",
+    name: "Project Proposal.docx",
+    type: "file",
+    url: "/files/proposal.docx",
+    parent: "1",
+    size: "2.5 MB",
   },
   {
-    id: "budget",
-    name: "Budget 2024",
-    type: "document",
+    id: "6",
+    name: "Vacation.jpg",
+    type: "file",
+    url: "/files/vacation.jpg",
+    parent: "2",
+    size: "3.7 MB",
+  },
+  {
+    id: "7",
+    name: "Profile Picture.png",
+    type: "file",
+    url: "/files/profile.png",
+    parent: "2",
     size: "1.8 MB",
-    modified: "Jan 14, 2024",
-    parentId: "documents",
   },
   {
-    id: "contract",
-    name: "Contract",
-    type: "pdf",
-    size: "4.5 MB",
-    modified: "Jan 12, 2024",
-    parentId: "documents",
-  },
-  // Images folder contents
-  {
-    id: "team-photo",
-    name: "Team Photo",
-    type: "image",
-    size: "3.2 MB",
-    modified: "Jan 13, 2024",
-    parentId: "images",
+    id: "9",
+    name: "Q4 Report.pptx",
+    type: "file",
+    url: "/files/q4-report.pptx",
+    parent: "8",
+    size: "5.2 MB",
   },
   {
-    id: "logo",
-    name: "Company Logo",
-    type: "image",
-    size: "1.1 MB",
-    modified: "Jan 11, 2024",
-    parentId: "images",
+    id: "10",
+    name: "Budget.xlsx",
+    type: "file",
+    url: "/files/budget.xlsx",
+    parent: "3",
+    size: "1.5 MB",
   },
 ];
