@@ -1,6 +1,6 @@
 import { db } from "@/server/db";
 import { mockFiles, mockFolders } from "@/lib/data";
-import { folders_table } from "@/server/db/schema";
+import { folders_table, files_table } from "@/server/db/schema";
 
 export default function SandboxPage() {
   return (
@@ -11,19 +11,31 @@ export default function SandboxPage() {
         action={async () => {
           "use server";
           console.log("Seeding database...");
-          // await db
-          //   .insert(folders_table)
-          //   .values(
-          //     mockFolders.map((folder) => ({
-          //       id: folder.id + 1,
-          //       name: folder.name,
-          //       parent: index !== 0 ? 1 : null,
-          //     })),
-          //   )
-          //   .execute();
-          // await db.insert(files).values(mockFiles.map(file => ({
-          //   name: file.name
-          // }))).execute();
+          const folderInsert = await db
+            .insert(folders_table)
+            .values(
+              mockFolders.map((folder, index) => ({
+                name: folder.name,
+                parent: index !== 0 ? 1 : null,
+                id: index + 1,
+              })),
+            )
+            .execute();
+          console.log(folderInsert);
+          const fileInsert = await db
+            .insert(files_table)
+            .values(
+              mockFiles.map((file, index) => ({
+                name: file.name,
+                parent: (index % 3) + 1,
+                size: file.size,
+                url: file.url,
+                id: index + 1,
+              })),
+            )
+            .execute();
+
+          console.log(fileInsert);
         }}
       >
         <button type="submit">Seed</button>
