@@ -6,6 +6,24 @@ import {
 import { db } from "@/server/db";
 import { eq } from "drizzle-orm";
 
+async function getAllParents(folderId: number) {
+  const parents = [];
+  let currentId: number | null = folderId;
+  while (currentId !== null) {
+    const folder = await db
+      .selectDistinct()
+      .from(foldersSchema)
+      .where(eq(foldersSchema.id, currentId));
+
+    if (!folder[0]) {
+      throw new Error("Folder not found");
+    }
+    parents.unshift(folder[0]);
+    currentId = folder[0]?.parent;
+  }
+  return parents;
+}
+
 export default async function Page(props: {
   params: Promise<{
     folderId: string;
@@ -29,7 +47,13 @@ export default async function Page(props: {
     .from(foldersSchema)
     .where(eq(foldersSchema.parent, parsedFolderId));
 
-  const [files, folders] = await Promise.all([filesPromise, foldersPromise]);
+  const parentsPromise = await getAllParents(parsedFolderId);
 
-  return <DriveContents files={files} folders={folders} />;
+  const [files, folders, parents] = await Promise.all([
+    filesPromise,
+    foldersPromise,
+    parentsPromise,
+  ]);
+
+  return <DriveContents files={files} folders={folders} parents={parents} />;
 }

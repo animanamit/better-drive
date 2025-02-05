@@ -1,35 +1,15 @@
-import { ChevronRight } from "lucide-react";
 import { FileRow, FolderRow } from "@/app/file-row";
-import { Button } from "@/components/ui/button";
-import {
+import type {
   files_table as filesSchema,
   folders_table as foldersSchema,
-  type files_table,
-  type folders_table,
 } from "@/server/db/schema";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { db } from "@/server/db";
-import { eq } from "drizzle-orm";
-
-async function getAllParents(folderId: number) {
-  const parents = [];
-  let currentId = folderId;
-  while (currentId !== null) {
-    parents.push(currentId);
-    const folder = await db
-      .select()
-      .from(foldersSchema)
-      .where(eq(foldersSchema.id, currentId))
-      .then((rows) => rows[0]);
-
-    currentId = folder?.parent ?? 1;
-  }
-  return parents;
-}
 
 export default function DriveContents(props: {
   files: (typeof filesSchema.$inferSelect)[];
   folders: (typeof foldersSchema.$inferSelect)[];
+  parents: (typeof foldersSchema.$inferSelect)[];
 }) {
   const breadcrumbs = [];
 
@@ -53,7 +33,7 @@ export default function DriveContents(props: {
         <Link href="/f/1" className="mr-2 text-gray-300 hover:text-white">
           My Drive
         </Link>
-        {/* {breadcrumbs.map((folder) => (
+        {props.parents.map((folder) => (
           <div key={folder.id} className="flex items-center">
             <ChevronRight className="mx-2 text-gray-500" size={16} />
             <Link
@@ -63,7 +43,7 @@ export default function DriveContents(props: {
               {folder.name}
             </Link>
           </div>
-        ))} */}
+        ))}
       </div>
 
       {/* Files List */}
