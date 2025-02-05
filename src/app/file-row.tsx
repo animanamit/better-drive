@@ -1,7 +1,8 @@
 import { type Folder, type File } from "@/lib/types";
 import { FileIcon, Folder as FolderIcon } from "lucide-react";
+import type { files_table, folders_table } from "@/server/db/schema";
 
-export function FileRow(props: { file: File }) {
+export function FileRow(props: { file: typeof files_table.$inferSelect }) {
   const { file } = props;
   return (
     <div
@@ -16,14 +17,13 @@ export function FileRow(props: { file: File }) {
         <FileIcon className="h-5 w-5 text-gray-500" />
         <span className="text-gray-900">{file.name}</span>
       </a>
-      <div className="col-span-3 text-gray-500">{file.type}</div>
       <div className="col-span-3 text-gray-500">{file.size ?? "--"}</div>
     </div>
   );
 }
 
 export function FolderRow(props: {
-  folder: Folder;
+  folder: typeof folders_table.$inferSelect;
   handleFolderClick: () => void;
 }) {
   const { folder, handleFolderClick } = props;
