@@ -1,37 +1,37 @@
-"use client";
-
-import { useMemo, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { FileRow, FolderRow } from "@/app/file-row";
 import { Button } from "@/components/ui/button";
-import type { files_table, folders_table } from "@/server/db/schema";
+import {
+  files_table as filesSchema,
+  folders_table as foldersSchema,
+  type files_table,
+  type folders_table,
+} from "@/server/db/schema";
+import Link from "next/link";
+import { db } from "@/server/db";
+import { eq } from "drizzle-orm";
+
+async function getAllParents(folderId: number) {
+  const parents = [];
+  let currentId = folderId;
+  while (currentId !== null) {
+    parents.push(currentId);
+    const folder = await db
+      .select()
+      .from(foldersSchema)
+      .where(eq(foldersSchema.id, currentId))
+      .then((rows) => rows[0]);
+
+    currentId = folder?.parent ?? 1;
+  }
+  return parents;
+}
 
 export default function DriveContents(props: {
-  files: (typeof files_table.$inferSelect)[];
-  folders: (typeof folders_table.$inferSelect)[];
+  files: (typeof filesSchema.$inferSelect)[];
+  folders: (typeof foldersSchema.$inferSelect)[];
 }) {
-  const [currentFolder, setCurrentFolder] = useState<number>(1);
-
-  const handleFolderClick = (folderId: number) => {
-    setCurrentFolder(folderId);
-  };
-
-  const breadcrumbs = useMemo(() => {
-    const breadcrumbs = [];
-    let currentId = currentFolder;
-
-    while (currentId !== 1) {
-      const folder = props.folders.find((folder) => folder.id === currentId);
-      if (folder) {
-        breadcrumbs.unshift(folder);
-        currentId = folder.parent ?? 1;
-      } else {
-        break;
-      }
-    }
-
-    return breadcrumbs;
-  }, [currentFolder, props.folders]);
+  const breadcrumbs = [];
 
   return (
     <div className="mx-auto max-w-5xl p-8">
@@ -50,25 +50,20 @@ export default function DriveContents(props: {
 
       {/* Breadcrumbs */}
       <div className="mb-6 flex items-center space-x-2 text-sm">
-        <Button
-          onClick={() => setCurrentFolder(1)}
-          variant="ghost"
-          className="mr-2 text-gray-300 hover:text-white"
-        >
+        <Link href="/f/1" className="mr-2 text-gray-300 hover:text-white">
           My Drive
-        </Button>
-        {breadcrumbs.map((folder) => (
+        </Link>
+        {/* {breadcrumbs.map((folder) => (
           <div key={folder.id} className="flex items-center">
             <ChevronRight className="mx-2 text-gray-500" size={16} />
-            <Button
-              onClick={() => handleFolderClick(folder.id)}
-              variant="ghost"
+            <Link
+              href={`/f/${folder.id}`}
               className="text-gray-300 hover:text-white"
             >
               {folder.name}
-            </Button>
+            </Link>
           </div>
-        ))}
+        ))} */}
       </div>
 
       {/* Files List */}
@@ -83,11 +78,7 @@ export default function DriveContents(props: {
         {/* Files */}
         <div className="divide-y divide-gray-100">
           {props.folders.map((folder) => (
-            <FolderRow
-              key={folder.id}
-              folder={folder}
-              handleFolderClick={() => handleFolderClick(folder.id)}
-            />
+            <FolderRow key={folder.id} folder={folder} />
           ))}
           {props.files.map((file) => (
             <FileRow key={file.id} file={file} />
