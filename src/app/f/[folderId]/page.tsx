@@ -5,6 +5,7 @@ import {
 } from "@/server/db/schema";
 import { db } from "@/server/db";
 import { eq } from "drizzle-orm";
+import { QUERIES } from "@/server/db/queries";
 
 async function getAllParents(folderId: number) {
   const parents = [];
@@ -38,21 +39,11 @@ export default async function Page(props: {
       </div>
     );
   }
-  const filesPromise = await db
-    .select()
-    .from(filesSchema)
-    .where(eq(filesSchema.parent, parsedFolderId));
-  const foldersPromise = await db
-    .select()
-    .from(foldersSchema)
-    .where(eq(foldersSchema.parent, parsedFolderId));
-
-  const parentsPromise = await getAllParents(parsedFolderId);
 
   const [files, folders, parents] = await Promise.all([
-    filesPromise,
-    foldersPromise,
-    parentsPromise,
+    QUERIES.getFiles(parsedFolderId),
+    QUERIES.getFolders(parsedFolderId),
+    QUERIES.getAllParentsForFolder(parsedFolderId),
   ]);
 
   return <DriveContents files={files} folders={folders} parents={parents} />;
