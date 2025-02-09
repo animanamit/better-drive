@@ -1,4 +1,5 @@
 import {
+  DB_File,
   files_table as filesSchema,
   folders_table as foldersSchema,
 } from "@/server/db/schema";
@@ -34,5 +35,23 @@ export const QUERIES = {
       currentId = folder[0]?.parent;
     }
     return parents;
+  },
+};
+
+export const MUTATIONS = {
+  createFile: async function (input: {
+    file: {
+      name: string;
+      parent: number;
+      size: string;
+      url: string;
+    };
+    userId: string;
+  }) {
+    if (!input.userId) {
+      throw new Error("User not found");
+    }
+
+    const file = await db.insert(filesSchema).values(input.file);
   },
 };

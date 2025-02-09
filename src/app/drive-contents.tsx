@@ -1,4 +1,7 @@
+"use client";
+
 import { FileRow, FolderRow } from "@/app/file-row";
+import { UploadButton } from "@/components/uploadthing";
 import type {
   files_table as filesSchema,
   folders_table as foldersSchema,
@@ -12,8 +15,6 @@ export default function DriveContents(props: {
   folders: (typeof foldersSchema.$inferSelect)[];
   parents: (typeof foldersSchema.$inferSelect)[];
 }) {
-  const breadcrumbs = [];
-
   return (
     <div className="mx-auto max-w-5xl p-8">
       {/* Search Bar */}
@@ -74,6 +75,7 @@ export default function DriveContents(props: {
           ))}
         </div>
       </div>
+      <UploadButton endpoint="imageUploader" className="mt-8" />
     </div>
   );
 }
