@@ -3,6 +3,7 @@ import type {
   files_table as filesSchema,
   folders_table as foldersSchema,
 } from "@/server/db/schema";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
@@ -29,21 +30,29 @@ export default function DriveContents(props: {
       </div> */}
 
       {/* Breadcrumbs */}
-      <div className="mb-6 flex items-center space-x-2 text-sm">
-        <Link href="/f/1" className="mr-2 text-gray-300 hover:text-white">
-          My Drive
-        </Link>
-        {props.parents.map((folder) => (
-          <div key={folder.id} className="flex items-center">
-            <ChevronRight className="mx-2 text-gray-500" size={16} />
-            <Link
-              href={`/f/${folder.id}`}
-              className="text-gray-300 hover:text-white"
-            >
-              {folder.name}
-            </Link>
-          </div>
-        ))}
+      <div className="mb-6 flex items-center justify-between space-x-2 text-sm">
+        <div className="flex items-center">
+          <Link href="/f/1" className="mr-2 text-gray-300 hover:text-white">
+            My Drive
+          </Link>
+          {props.parents.map((folder) => (
+            <div key={folder.id} className="flex items-center">
+              <ChevronRight className="mx-2 text-gray-500" size={16} />
+              <Link
+                href={`/f/${folder.id}`}
+                className="text-gray-300 hover:text-white"
+              >
+                {folder.name}
+              </Link>
+            </div>
+          ))}
+        </div>
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
       </div>
 
       {/* Files List */}
