@@ -42,7 +42,6 @@ export const MUTATIONS = {
   createFile: async function (input: {
     file: {
       name: string;
-      parent: number;
       size: string;
       url: string;
     };
@@ -52,6 +51,9 @@ export const MUTATIONS = {
       throw new Error("User not found");
     }
 
-    const file = await db.insert(filesSchema).values(input.file);
+    return await db.insert(filesSchema).values({
+      ...input.file,
+      parent: 1,
+    });
   },
 };

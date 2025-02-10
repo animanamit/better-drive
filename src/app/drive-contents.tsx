@@ -9,12 +9,15 @@ import type {
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function DriveContents(props: {
   files: (typeof filesSchema.$inferSelect)[];
   folders: (typeof foldersSchema.$inferSelect)[];
   parents: (typeof foldersSchema.$inferSelect)[];
 }) {
+  const navigate = useRouter();
+
   return (
     <div className="mx-auto max-w-5xl p-8">
       {/* Search Bar */}
@@ -75,7 +78,13 @@ export default function DriveContents(props: {
           ))}
         </div>
       </div>
-      <UploadButton endpoint="imageUploader" className="mt-8" />
+      <UploadButton
+        endpoint="imageUploader"
+        className="mt-8"
+        onClientUploadComplete={() => {
+          navigate.refresh();
+        }}
+      />
     </div>
   );
 }
