@@ -65,8 +65,8 @@ export default function DriveContents(props: {
         {/* Header */}
         <div className="grid grid-cols-12 gap-4 border-b border-gray-200 px-4 py-3 text-sm font-medium text-gray-500">
           <div className="col-span-6">Name</div>
-          <div className="col-span-3">Type</div>
           <div className="col-span-3">Size</div>
+          {/* <div className="col-span-3">Type</div> */}
         </div>
 
         {/* Files */}
