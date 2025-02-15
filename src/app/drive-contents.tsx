@@ -34,7 +34,6 @@ export default function DriveContents(props: {
         <Button>Upload</Button>
       </div> */}
 
-      {/* Breadcrumbs */}
       <div className="mb-6 flex items-center justify-between space-x-2 text-sm">
         <div className="flex items-center">
           <Link href="/f/1" className="mr-2 text-gray-300 hover:text-white">
@@ -60,16 +59,13 @@ export default function DriveContents(props: {
         </SignedIn>
       </div>
 
-      {/* Files List */}
       <div className="rounded-lg border border-gray-200 bg-white">
-        {/* Header */}
         <div className="grid grid-cols-12 gap-4 border-b border-gray-200 px-4 py-3 text-sm font-medium text-gray-500">
           <div className="col-span-6">Name</div>
           <div className="col-span-3">Size</div>
-          {/* <div className="col-span-3">Type</div> */}
+          <div className="col-span-3">Type</div>
         </div>
 
-        {/* Files */}
         <div className="divide-y divide-gray-100">
           {props.folders.map((folder) => (
             <FolderRow key={folder.id} folder={folder} />
