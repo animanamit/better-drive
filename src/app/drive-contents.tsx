@@ -1,13 +1,14 @@
 "use client";
 
 import { FileRow, FolderRow } from "@/app/file-row";
+import { Button } from "@/components/ui/button";
 import { UploadButton } from "@/components/uploadthing";
 import type {
   files_table as filesSchema,
   folders_table as foldersSchema,
 } from "@/server/db/schema";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Search } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -21,18 +22,15 @@ export default function DriveContents(props: {
 
   return (
     <div className="mx-auto max-w-5xl p-8">
-      {/* Search Bar */}
-      {/* <div className="relative mb-6 flex justify-between gap-x-4 rounded-lg">
+      <div className="relative mb-6 flex justify-between gap-x-4 rounded-lg">
         <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 transform text-gray-400" />
         <input
           type="text"
           placeholder="Search files..."
           className="w-full rounded-lg border border-gray-200 py-2 pl-10 pr-4 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
         />
         <Button>Upload</Button>
-      </div> */}
+      </div>
 
       <div className="mb-6 flex items-center justify-between space-x-2 text-sm">
         <div className="flex items-center">
