@@ -1,5 +1,7 @@
-import { db } from "@/server/db";
-
 export default async function Page() {
-  return <div>yuh</div>;
+  return (
+    <div className="flex h-full items-center justify-center">
+      a better drive.
+    </div>
+  );
 }

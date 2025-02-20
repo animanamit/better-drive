@@ -23,16 +23,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className={`${GeistSans.variable}`}>
-        <body className={`min-h-screen bg-stone-100`}>
-          {/* <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn> */}
-
-          {children}
-        </body>
+        <body className={`min-h-screen bg-stone-100`}>{children}</body>
       </html>
     </ClerkProvider>
   );
